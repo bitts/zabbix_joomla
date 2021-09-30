@@ -29,15 +29,22 @@ AllowRoot=1
 # Default:
 # User=zabbix
 User=root
+
+# Adiconando funcionando do script de monitoramento do CMS Joomla!
+UserParameter=joomla.site[*],/etc/zabbix/zabbix_agentd.d/zabbix_joomla.php $1 $2 $3
+
 ```
 
+
+
+Para testes no console
 ```
 zabbix_agentd -t joomla.site[{$site},opcao]
 ```
 Onde {$site} é a Macro com o nome do Host do CMS a ser monitorado
 
 
-# Opçoes para monitoramento
+# Opções para monitoramento
 
 - Retorna informações do Virtual Host (arquivo de configuração do apache2 localizado em /etc/apache2/sites-avaliables/)
 ```
