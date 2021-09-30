@@ -17,8 +17,11 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-** Create by Marcelo Valvassori BITTENCOURT
-** 1.0v - 26/09/2021 - Primeira versão do monitor zabbix para joomla
+**
+** Create by Marcelo Valvassori BITTENCOURT <marcelo.valvassori@gmail.com>
+** Brazil - 26/09/2021 
+** Versions
+** 1.0v - Primeira versão do monitor zabbix para joomla
 ** 
 ** NOTES:
 ** Obs: Necessário habilitar acesso root para usuario Zabbix:
@@ -105,10 +108,10 @@ if(php_sapi_name() == 'cli' || PHP_SAPI === 'cli'){
 }
 
 /**
-*
+* return information to configuration publish apache2 website
 * @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
 * @param String $file 
-* @return stdClass 
+* @return mixed
 */
 function parseVirtualHosts($file) {
 	try{
@@ -158,6 +161,11 @@ function parseVirtualHosts($file) {
 }
 
 
+/**
+* Return information about application CMS Joomla!
+* Application: Zabbix Agent Monitor UserParameter
+* @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
+*/
 
 class mn_joomla_zb{
   
@@ -165,12 +173,12 @@ class mn_joomla_zb{
 		$this->folder = $folder;
 	}
 
- /**
- * 
- * @access private
- * @param string $size 
- * @return integer 
- */
+	/**
+	* format size length bytes
+	* @access private
+	* @param int $size 
+	* @return int
+	*/
 	private function format_size($size) {
   		$mod = 1024;
   		$units = explode(' ','B KB MB GB TB PB');
@@ -180,12 +188,12 @@ class mn_joomla_zb{
   		return round($size, 2) . ' ' . $units[$i];
 	}
 	
- /**
- * 
- * @access private
- * @param string $path 
- * @return array 
- */
+	/**
+	* search files and folder to path 
+	* @access private
+	* @param string $path 
+	* @return array 
+	*/
 	private function iterate_dir($path) {
 		$files = array( );
 		if (is_dir($path) && is_readable($path)) {
@@ -206,12 +214,12 @@ class mn_joomla_zb{
 		return $files;
 	}
 
-/**
- * 
- * @access private
- * @param string $folder 
- * @return array 
- */  
+	/**
+	* return size of folder 
+	* @access private
+	* @param string $folder 
+	* @return int 
+	*/  
 	public function foldersize($folder = "") {
 		$path = isset($folder) && !empty($folder)?$folder:$this->folder;
   		$total_size = 0;
@@ -234,12 +242,13 @@ class mn_joomla_zb{
   		return $total_size;
 	}
 
-/**
- * 
- * @access private
- * @param string $url 
- * @return array 
- */    
+	/**
+	* return status to active url
+	* @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>	
+	* @access private
+	* @param string $url 
+	* @return bool
+	*/    
 	private function url_exists( $url ) {
 		if( function_exists('curl_init') ){
 			$ch = curl_init( $url );
@@ -259,16 +268,17 @@ class mn_joomla_zb{
 		return ($code >= 200 && $code < 400); // verifica se recebe "status OK"
 	}
 
-  /**
-  *
-  * @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
-  * @access private
-  * @return string   
-  */
+	/**
+	* return last version released to CMS Joomla!
+	* @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
+	* @access private
+	* @return string   
+	*/
 	public function jm_lastVersion(){
 		$version = 0;
+		$json_server = "https://downloads.joomla.org/api/v1/latest/cms";
+		
 		if( function_exists('curl_init') &&  function_exists('json_decode') ){
-			$json_server = "https://downloads.joomla.org/api/v1/latest/cms";
 			if(self::url_exists($json_server)){
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
@@ -292,7 +302,6 @@ class mn_joomla_zb{
 		}
 
 		if( $version == 0 && function_exists('json_decode') && function_exists('file_get_contents') ){
-			$json_server = "https://downloads.joomla.org/api/v1/latest/cms";
 			if(self::url_exists($json_server)){
 				$arrContextOptions=array(
 					"ssl" => array(
@@ -330,46 +339,53 @@ class mn_joomla_zb{
 		return $version;
 	}
 
+	/**
+	* return sizeof the folder
+	* @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
+	* @access private
+	* @param string $folder	
+	* @return string   
+	*/
 	public function hfoldersize($folder = ""){
 		$path = isset($folder) && !empty($folder)?$folder:$this->folder;
 		return $this->format_size($this->foldersize($path));
 	}
 
-  /**
-  *
-  * @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
-  * @access private
-  * @param string $folder   
-  * @return object     
-  */
+	/**
+	* return object content information to backup files to CMS Joomla!
+	* @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
+	* @access private
+	* @param string $folder
+	* @return mixed     
+	*/
 	public function jm_backupfiles($folder = ""){
 		$jpas = array();
 		$pasta = isset($folder) && !empty($folder)?$folder:$this->folder;
 		$files = self::iterate_dir($pasta);
 		foreach ($files as $file) {
-			//if(is_file($file))
-			if( preg_match('~\.(jpa|j01|j02|j03|j04|j05|j06|j07|j07|j08|j09|j10|j11|j12|j13|j14|j15|j16)$~', $file) ){
-				$oF = new stdClass();
-				$oF->tamanho = filesize($file);
-				$oF->size = $this->format_size(filesize($file));
-				$oF->name = (string)$file;
-				$oF->date = date('Y-m-d G:i:s', filemtime($file) );
-				$jpas[] = $oF;
-			}
+			if(is_file($file))
+				if( preg_match('~\.(jpa|j01|j02|j03|j04|j05|j06|j07|j07|j08|j09|j10|j11|j12|j13|j14|j15|j16)$~', $file) ){
+					$oF = new stdClass();
+					$oF->tamanho = filesize($file);
+					$oF->size = $this->format_size(filesize($file));
+					$oF->name = (string)$file;
+					$oF->date = date('Y-m-d G:i:s', filemtime($file) );
+					$jpas[] = $oF;
+				}
 		}
 		return $jpas;
 	}
 
-  /**
-  * return last version stable CMS Joomla!
-  * @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
-  * @access private
-  * @param string $folder   
-  * @return string   
-  */
+	/**
+	* return last version stable CMS Joomla!
+	* @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
+	* @access private
+	* @param string $folder   
+	* @return string   
+	*/
 	public function jm_getVersion($folder = ""){
 		$path = isset($folder) && !empty($folder)?$folder:$this->folder;
-		$vs = 0; //shell_exec("php /etc/zabbix/zabbix_agentd.d/check_joomla.php -p={$folder}");
+		$vs = 0;
 		$version = $vs;
 		if( function_exists('simplexml_load_file') ){
 			if(file_exists("{$path}/administrator/manifests/files/joomla.xml")){
@@ -382,21 +398,19 @@ class mn_joomla_zb{
 				$xml = simplexml_load_file("{$path}/language/en-GB/en-GB.xml");
 				$version = (string)$xml->version;
 			}else {
-				//$version = $this->getVSJoomla($path);
-				//$version = $this->getJoomlaVersion_($path);
-				$version = "0";
+				$version = $this->getJoomlaVersionCURL($path);
 			}
 		}
 		return $version;
 	}
 
-  /**
-  * return last version stable CMS Joomla!
-  * @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
-  * @access private
-  * @param string $folder   
-  * @return string   
-  */
+	/**
+	* return last version stable CMS Joomla!
+	* @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
+	* @access private
+	* @param string $folder   
+	* @return string   
+	*/
 	public function getJoomlaVersionCURL($folder = "") {
 		$path = isset($folder) && !empty($folder)?$folder:$this->folder;
 	 	$version = "";
@@ -469,14 +483,14 @@ class mn_joomla_zb{
 		return $jversion;
  	}
 
-  /**
-  * return information content in configuration.php file to CMS Joomla!
-  * @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
-  * @access private
-  * @param string $folder   
-  * @param string $parm |host,pswd,dtbs,user,dbtype,dbprefix,mailfrom,fromname,smtphost,sitename,editor  
-  * @return string|object   
-  */
+	/**
+	* return information content in configuration.php file to CMS Joomla!
+	* @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
+	* @access private
+	* @param string $folder   
+	* @param string $parm |host,pswd,dtbs,user,dbtype,dbprefix,mailfrom,fromname,smtphost,sitename,editor  
+	* @return string|object   
+	*/
 	public function jm_getParamConfiguration( $folder = '', $parm = '' ){
 		$path = !empty($folder)?$folder:$this->folder;
 		$dtconf = new stdClass();
@@ -516,13 +530,13 @@ class mn_joomla_zb{
 		}else return $dtconf;
 	}
 
-  /**
-  * return users insert in database/table __users to CMS Joomla!
-  * @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
-  * @access public
-  * @param string $parm | dtbs,dbprefix,dbtype,host,pswd,user
-  * @return object   
-  */
+	/**
+	* return users insert in database/table __users to CMS Joomla!
+	* @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
+	* @access public
+	* @param string $parm | dtbs,dbprefix,dbtype,host,pswd,user
+	* @return mixed   
+	*/
 	public function getDBUsers( $parm ){
 		$Obj = new stdClass();
 		if(!empty($parm)){
@@ -579,13 +593,13 @@ class mn_joomla_zb{
 		return $Obj;
 	}
 
-  /**
-  * return information about do backups files in format JPA to CMS Joomla!
-  * @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
-  * @access public
-  * @param string $parm | jpa,jpasize,hjpasize,njpas
-  * @return object   
-  */
+	/**
+	* return information about do backups files in format JPA to CMS Joomla!
+	* @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
+	* @access public
+	* @param string $parm | jpa,jpasize,hjpasize,njpas
+	* @return mixed   
+	*/
 	public function jpa($retorno){
 		$jpas = $this->jm_backupfiles();
 		switch($retorno){
@@ -612,5 +626,6 @@ class mn_joomla_zb{
 		}
 	}
 }
+
 
 
