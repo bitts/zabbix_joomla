@@ -1,7 +1,7 @@
 # Monitoramento Zabbix para CMS Joomla!
 
 
-<a href="https://github.com/bitts/zabbix_joomla/releases/tag/1.0v"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/bitts/zabbix_joomla"></a>
+<a href="https://github.com/bitts/zabbix_joomla"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/bitts/zabbix_joomla"></a>
 <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/bitts/zabbix_joomla">
 <img alt="GitHub Release Date" src="https://img.shields.io/github/release-date/bitts/zabbix_joomla">
 <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/bitts/zabbix_joomla/total">
