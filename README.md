@@ -17,6 +17,8 @@
 
 Sistema de monitoramento utilizando UserPatameter do Zabbix para aplicação Joomla.
 
+https://www.zabbix.com/documentation/current/pt/manual/concepts/agent
+
 ## Utilização
 
 Para utilização necessário habilitar execução do script como root editando o arquivo /etc/zabbix/zabbix_agentd.conf e modificando as diretivas AllowRoot e User
