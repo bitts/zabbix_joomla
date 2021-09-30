@@ -6,6 +6,31 @@
 Sistema de monitoramento utilizando UserPatameter do Zabbix para aplicação Joomla.
 
 ## Utilização
+
+Para utilização necessário habilitar execução do script como root editando o arquivo /etc/zabbix/zabbix_agentd.conf e modificando as diretivas AllowRoot e User
+```
+### Option: AllowRoot
+#       Allow the agent to run as 'root'. If disabled and the agent is started by 'root', the agent
+#       will try to switch to the user specified by the User configuration option instead.
+#       Has no effect if started under a regular user.
+#       0 - do not allow
+#       1 - allow
+#
+# Mandatory: no
+# Default:
+# AllowRoot=0
+AllowRoot=1
+
+### Option: User
+#       Drop privileges to a specific, existing user on the system.
+#       Only has effect if run as 'root' and AllowRoot is disabled.
+#
+# Mandatory: no
+# Default:
+# User=zabbix
+User=root
+```
+
 ```
 zabbix_agentd -t joomla.site[{$site},opcao]
 ```
