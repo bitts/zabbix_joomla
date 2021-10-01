@@ -17,7 +17,9 @@
 
 Sistema de monitoramento utilizando UserPatameter do Zabbix para aplicação Joomla.
 
-https://www.zabbix.com/documentation/current/pt/manual/concepts/agent
+## Referências
+- https://www.zabbix.com/documentation/current/pt/manual/concepts/agent
+- https://www.zabbix.com/documentation/guidelines/coding/php
 
 ## Utilização
 
