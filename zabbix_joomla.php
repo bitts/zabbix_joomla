@@ -57,7 +57,7 @@ if(php_sapi_name() == 'cli' || PHP_SAPI === 'cli'){
 					echo !empty($vh->serverAlias)?$vh->serverAlias:null;
 				break;
 				case 'port':
-					echo !empty($vh->port)?$vh->port:null;
+					echo !empty($vh->ports)?implode(',',$vh->ports):null;
 				break;
 				case 'apacheconf':
 					echo !empty($vh->file)?$vh->file:null;
