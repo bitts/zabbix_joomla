@@ -2,6 +2,7 @@
 <?php
 /*
 ** Zabbix Agent Monitor Joomla
+** https://github.com/bitts/zabbix_joomla
 ** Copyright (C) 2020-2021 Zabbix Monitor Agent SIA
 **
 ** This program is free software; you can redistribute it and/or modify
@@ -19,7 +20,8 @@
 ** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 **
 ** Create by Marcelo Valvassori BITTENCOURT <marcelo.valvassori@gmail.com>
-** Brazil 
+** Brazil
+**
 ** Versions
 ** 1.0v - 26/09/2021 - Primeira versão do monitor zabbix para joomla
 ** 1.1v - 17/10/2021 - Melhorias para funcionamento com regra de descoberta utilizando dados dos sites publicados pelo apache
