@@ -12,6 +12,7 @@
 <p align="left"><a href="https://downloads.joomla.org" target="_blank" rel="noopener noreferrer"><img src="https://downloads.joomla.org/images/homepage/joomla-logo.png" alt="Joomla Logo"></a></p>
 
 - [Referências](#refer%C3%AAncias)
+- [Template](#template)
 - [Utilização](#utiliza%C3%A7%C3%A3o)
   * [Opções para monitoramento](#op%C3%A7%C3%B5es-para-monitoramento)
     + [virtualhosts](#virtualhosts)
@@ -38,6 +39,10 @@ Script de monitoramento utilizando UserPatameter do Zabbix para aplicação Joom
 ## Referências
 - https://www.zabbix.com/documentation/current/pt/manual/concepts/agent
 - https://www.zabbix.com/documentation/guidelines/coding/php
+
+## Template
+- Import `zbx_export_templates_joomla.xml`.  [zabbix doc](https://www.zabbix.com/documentation/current/manual/xml_export_import/templates)
+- Link template to hosts.  [zabbix doc](https://www.zabbix.com/documentation/current/manual/config/templates/linking)
 
 ## Utilização
 
