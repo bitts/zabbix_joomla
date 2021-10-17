@@ -19,10 +19,10 @@
 ** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 **
 ** Create by Marcelo Valvassori BITTENCOURT <marcelo.valvassori@gmail.com>
-** Brazil - 26/09/2021 
+** Brazil 
 ** Versions
-** 1.0v - Primeira versão do monitor zabbix para joomla
-** 1.1v - Melhorias para funcionamento com regra de descoberta utilizando dados dos sites publicados pelo apache
+** 1.0v - 26/09/2021 - Primeira versão do monitor zabbix para joomla
+** 1.1v - 17/10/2021 - Melhorias para funcionamento com regra de descoberta utilizando dados dos sites publicados pelo apache
 ** 
 ** NOTES:
 ** Obs: Necessário habilitar acesso root para usuario Zabbix:
