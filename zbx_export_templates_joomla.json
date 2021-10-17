@@ -1,0 +1,358 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-10-17T17:40:26Z",
+        "groups": [
+            {
+                "name": "Joomla"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Monitoramento Joomla",
+                "name": "Monitor Joomla",
+                "description": "Monitoramento de aplica\u00e7\u00e3o Joomla\nhttps://github.com/bitts/zabbix_joomla",
+                "groups": [
+                    {
+                        "name": "Joomla"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Joomla"
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "Joomla - Apache Configuration publish websites",
+                        "key": "joomla.site[sites]",
+                        "description": "Descoberta de sites publicados",
+                        "item_prototypes": [
+                            {
+                                "name": "{#OM} - Joomla - Path Apache Configuration",
+                                "key": "joomla.site[{#OM},apacheconf]",
+                                "delay": "1d",
+                                "history": "365d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "Localiza\u00e7\u00e3o do arquivo de publica\u00e7\u00e3o do Apache para o CMS Joomla",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#OM} - Joomla - Folder Size",
+                                "key": "joomla.site[{#OM},foldersize]",
+                                "delay": "1d",
+                                "history": "365d",
+                                "units": "kb",
+                                "description": "Retorna tamanho total ocupado pelos arquivos do Joomla",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#OM} - Joomla - Folder Directory",
+                                "key": "joomla.site[{#OM},folder]",
+                                "delay": "1d",
+                                "history": "365d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "Diret\u00f3rio Raiz da Aplica\u00e7\u00e3o Joomla",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#OM} - Joomla - Folder Human Size",
+                                "key": "joomla.site[{#OM},hfoldersize]",
+                                "delay": "1d",
+                                "history": "365d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "Retorna tamanho total ocupado pelos arquivos do Joomla",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#OM} - Joomla - JPA total human size items",
+                                "key": "joomla.site[{#OM},hjpasize]",
+                                "delay": "1d",
+                                "history": "365d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "Retorna o tamanho total ocupado pelos arquivos de backup do Joomla",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#OM} - Joomla - Database Server DBPrefix",
+                                "key": "joomla.site[{#OM},jm_dataconfiguration,dbprefix]",
+                                "delay": "1d",
+                                "history": "365d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "Retorna Prefixo das tabelas utilizadas pelo servidor de banco de Dados da Apli\u00e7\u00e3o Joomla",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#OM} - Joomla - Database Server DBType",
+                                "key": "joomla.site[{#OM},jm_dataconfiguration,dbtype]",
+                                "delay": "1d",
+                                "history": "365d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "Retorna o tipo de base de dados utilizada para apli\u00e7\u00e3o Joomla",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#OM} - Joomla - Database Server DataBase",
+                                "key": "joomla.site[{#OM},jm_dataconfiguration,dtbs]",
+                                "delay": "1d",
+                                "history": "365d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "Retorna o nome do schema da base de dados utilizada para a aplica\u00e7\u00e3o Joomla",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#OM} - Joomla - Database Server Host",
+                                "key": "joomla.site[{#OM},jm_dataconfiguration,host]",
+                                "delay": "1d",
+                                "history": "365d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "Retorna Host do servidor de Banco de Dados da aplica\u00e7\u00e3o Joomla",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#OM} - Joomla - Database Server User",
+                                "key": "joomla.site[{#OM},jm_dataconfiguration,user]",
+                                "delay": "1d",
+                                "history": "365d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "Retorna Usu\u00e1rio do servidor de banco de Dados da Aplica\u00e7\u00e3o Joomla",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#OM} - Joomla - Configuration File data",
+                                "key": "joomla.site[{#OM},jm_dataconfiguration]",
+                                "delay": "1d",
+                                "history": "365d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "Dados do arquivo de configura\u00e7\u00e3o do Joomla",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#OM} - Joomla - Latest Published Version Joomla",
+                                "key": "joomla.site[{#OM},jm_lastversion]",
+                                "delay": "1d",
+                                "history": "365d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "Retorna a \u00faltima vers\u00e3o publicada e liberada do Joomla",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#OM} - Joomla - Number of user application",
+                                "key": "joomla.site[{#OM},jm_nusers]",
+                                "delay": "1d",
+                                "history": "365d",
+                                "description": "Retorno o n\u00famero de usu\u00e1rio cadastrados para acesso a aplica\u00e7\u00e3o Joomla e seu painel Administrativo",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#OM} - Joomla - User DB application",
+                                "key": "joomla.site[{#OM},jm_users]",
+                                "history": "365d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "Retorna objeto JSON com informa\u00e7\u00f5es dos usu\u00e1rios cadastrados para acesso a aplica\u00e7\u00e3o Joomla e seu painel administrativo",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#OM} - Joomla - Instaled Version",
+                                "key": "joomla.site[{#OM},jm_version]",
+                                "delay": "1d",
+                                "history": "365d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "Retorna vers\u00e3o instalada do Joomla",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#OM} - Joomla - JPA size of items",
+                                "key": "joomla.site[{#OM},jpasize]",
+                                "delay": "1d",
+                                "history": "365d",
+                                "units": "kb",
+                                "description": "Retorna o tamanho total ocupado pelos arquivos de backup no pdr\u00e3o Joomla (em Kb)",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#OM} - Joomla - JPA Backups Object",
+                                "key": "joomla.site[{#OM},jpas]",
+                                "delay": "1d",
+                                "history": "365d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "Retorna dados dos arquivos de backup no padr\u00e3o Joomla",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#OM} - Joomla - JPA number items",
+                                "key": "joomla.site[{#OM},njpas]",
+                                "delay": "1d",
+                                "history": "365d",
+                                "description": "Retorna o total de arquivos de backup no padr\u00e3o Joomla",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#OM} - Joomla - Permission Directory",
+                                "key": "joomla.site[{#OM},permission]",
+                                "delay": "1d",
+                                "history": "365d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "Retorna permiss\u00e3o do diret\u00f3rio Joomla",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#OM} - Joomla - Apache Enabled Port",
+                                "key": "joomla.site[{#OM},port]",
+                                "delay": "1d",
+                                "history": "365d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "Retorna a(s) porta(s) habilitada(s) para a Virtual Host da aplica\u00e7\u00e3o Joomla",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#OM} - Joomla - Server Alias",
+                                "key": "joomla.site[{#OM},serverAlias]",
+                                "delay": "1d",
+                                "history": "365d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "Retorna o Alias para a aplica\u00e7\u00e3o Joomla",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#OM} - Joomla - ServerName",
+                                "key": "joomla.site[{#OM},serverName]",
+                                "delay": "1d",
+                                "history": "365d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "Retorna o URL publicada do CMS Joomla",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#OM} - Joomla - Virtual Server Data",
+                                "key": "joomla.site[{#OM},virtualhosts]",
+                                "delay": "1d",
+                                "history": "365d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "Retorna informa\u00e7\u00f5es do arquivo de configura\u00e7\u00e3o do Virtual Host da aplica\u00e7\u00e3o Joomla",
+                                "applications": [
+                                    {
+                                        "name": "Joomla"
+                                    }
+                                ]
+                            }
+                        ],
+                        "lld_macro_paths": [
+                            {
+                                "lld_macro": "{#OM}",
+                                "path": "$.om"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
