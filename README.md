@@ -11,11 +11,29 @@
 
 <p align="left"><a href="https://downloads.joomla.org" target="_blank" rel="noopener noreferrer"><img src="https://downloads.joomla.org/images/homepage/joomla-logo.png" alt="Joomla Logo"></a></p>
 
-
+- [Referências](#refer%C3%AAncias)
+- [Utilização](#utiliza%C3%A7%C3%A3o)
+  * [Opções para monitoramento](#op%C3%A7%C3%B5es-para-monitoramento)
+    + [virtualhosts](#virtualhosts)
+    + [folder](#folder)
+    + [serverName](#serverName)
+    + [serverAlias](#serverAlias)
+    + [port](#port)
+    + [apacheconf](#apacheconf)
+    + [jpas](#jpas)
+    + [hjpasize](#hjpasize)
+    + [foldersize](#foldersize)
+    + [hfoldersize](#hfoldersize)
+    + [permission](#permission)
+    + [jm_version](#jm_version)
+    + [jm_lastversion](#jm_lastversion)
+    + [jm_dataconfiguration](#jm_dataconfiguration)
+    + [jm_users](#jm_users)
+    + [jm_nusers](#jm_nusers)
 
 # Zabbix User Agent to CMS Joomla!
 
-Sistema de monitoramento utilizando UserPatameter do Zabbix para aplicação Joomla.
+Script de monitoramento utilizando UserPatameter do Zabbix para aplicação Joomla.
 
 ## Referências
 - https://www.zabbix.com/documentation/current/pt/manual/concepts/agent
@@ -24,7 +42,7 @@ Sistema de monitoramento utilizando UserPatameter do Zabbix para aplicação Joo
 ## Utilização
 
 Para utilização necessário habilitar execução do script como root editando o arquivo /etc/zabbix/zabbix_agentd.conf e modificando as diretivas AllowRoot e User
-```
+```bash
 ### Option: AllowRoot
 #       Allow the agent to run as 'root'. If disabled and the agent is started by 'root', the agent
 #       will try to switch to the user specified by the User configuration option instead.
@@ -46,15 +64,14 @@ AllowRoot=1
 # User=zabbix
 User=root
 
-# Adiconando funcionando do script de monitoramento do CMS Joomla!
+# Adicionando funcionando do script de monitoramento do CMS Joomla!
 UserParameter=joomla.site[*],/etc/zabbix/zabbix_agentd.d/zabbix_joomla.php $1 $2 $3
 
 ```
 
 
-
 Para testes no console
-```
+```bash
 zabbix_agentd -t joomla.site[{$site},opcao]
 ```
 Onde {$site} é a Macro com o nome do Host do CMS a ser monitorado
@@ -62,82 +79,225 @@ Onde {$site} é a Macro com o nome do Host do CMS a ser monitorado
 
 # Opções para monitoramento
 
-- Retorna informações do Virtual Host (arquivo de configuração do apache2 localizado em /etc/apache2/sites-avaliables/)
-```
+## virtualhosts
+Retorna informações do Virtual Host (arquivo de configuração do apache2 localizado em /etc/apache2/sites-avaliables/)
+```bash
 zabbix_agentd -t joomla.site[{$site},virtualhosts]
 ```
-
-- Retorna path de localização dos arquivos do portal
+ > Output:
+```js
+{
+  "ports":["80","443"],
+  "file":"\/etc\/apache2\/sites-available\/site.com.br.conf",
+  "documentRoot":"\/var\/www\/site\/",
+  "serverName":"www.site.com.br",
+  "serverAlias":"site.com.br"
+}
 ```
+
+## folder
+Retorna path de localização dos arquivos do portal
+```bash
 zabbix_agentd -t joomla.site[{$site},folder]
 ```
-
-- Retorna o nome do Host Virtual
+ > Output:
 ```
+  /var/www/site/
+```
+
+## serverName
+Retorna o nome do Host Virtual
+```bash
 zabbix_agentd -t joomla.site[{$site},serverName]
 ```
-
-- Retorna Alias do Virtual Server
+ > Output:
 ```
+  www.site.com.br
+```
+
+## serverAlias
+Retorna Alias do Virtual Server
+```bash
 zabbix_agentd -t joomla.site[{$site},serverAlias]
 ```
-
-- Retorna 
+ > Output:
 ```
+  site.com.br
+```
+
+## port
+Retorna Porta(s) utilizadas para publicação do site
+```bash
 zabbix_agentd -t joomla.site[{$site},port]
 ```
-
-- Retorna configurações do apache
+ > Output:
 ```
+  80,443
+```
+
+## apacheconf
+Retorna configurações do apache
+```bash
 zabbix_agentd -t joomla.site[{$site},apacheconf]
 ```
-- Retorna os arquivos JPAs contidos no diretório e informações sobre esses arquivos
+ > Output:
 ```
+  /etc/apache2/sites-available/site.com.br.conf
+```
+
+## jpas
+Retorna os arquivos JPAs contidos no diretório e informações sobre esses arquivos
+```bash
 zabbix_agentd -t joomla.site[{$site},jpas]
 ```
-
-- Retorna o tamanho total dos JPAs contidos no diretório Joomla
+ > Output:
+```js
+[
+  {
+    "tamanho":554543,
+    "size":"541.55 KB",
+    "name":"\/var\/www\/1bcom\/\/administrator\/components\/com_akeeba\/Master\/Installers\/angie.jpa",
+    "date":"2021-09-01 11:02:56"
+  },
+  {
+    "tamanho":27120,
+    "size":"26.48 KB",
+    "name":"\/var\/www\/1bcom\/\/administrator\/components\/com_akeeba\/Master\/Installers\/angie-joomla.jpa",
+    "date":"2021-09-01 11:02:56"
+  },
+  {
+    "tamanho":46692,
+    "size":"45.6 KB",
+    "name":"\/var\/www\/1bcom\/\/administrator\/components\/com_akeeba\/Master\/Installers\/angie-mautic.jpa",
+    "date":"2016-09-19 11:31:24"
+  },
+]
 ```
+
+## hjpasize
+Retorna o tamanho total dos JPAs contidos no diretório Joomla
+```bash
 zabbix_agentd -t joomla.site[{$site},hjpasize]
 ```
-
-- Retorna o numero total de JPAs contidos no diretório Joomla
-
+ > Output:
 ```
+  628355
+```
+
+## njpas
+Retorna o numero total de JPAs contidos no diretório Joomla
+```bash
 zabbix_agentd -t joomla.site[{$site},njpas]
 ```
-
-- Retorna o tamanho total ocupado pelos arquivos Joomla
+ > Output:
 ```
+  3
+```
+
+## foldersize
+Retorna o tamanho total ocupado pelos arquivos Joomla
+```bash
 zabbix_agentd -t joomla.site[{$site},foldersize]
 ```
-
-- Retorna o tamanho total ocupado pelos arquivos Joomla (formatado)
+ > Output:
 ```
+  623471397
+```
+
+## hfoldersize
+Retorna o tamanho total ocupado pelos arquivos Joomla (formatado)
+```bash
 zabbix_agentd -t joomla.site[{$site},hfoldersize]
 ```
-
-- Retorna as permissões do arquivos Joomla
+ > Output:
 ```
+  594.59 MB
+```
+
+## permission
+Retorna as permissões do arquivos Joomla
+```bash
 zabbix_agentd -t joomla.site[{$site},permission]
 ```
-
-- Retorna a versão instalada do Joomla
+ > Output:
 ```
+  2770
+```
+
+## jm_version
+Retorna a versão instalada do Joomla
+```bash
 zabbix_agentd -t joomla.site[{$site},jm_version]
 ```
-
-- Retorna a última versão estável e liberada do CMS Joomla
+ > Output:
 ```
+  3.9.27
+```
+
+## jm_lastversion
+Retorna a última versão estável e liberada do CMS Joomla
+```bash
 zabbix_agentd -t joomla.site[{$site},jm_lastversion]
 ```
-
-- Retorna as informações contidas no arquivo configuration.php do Joomla com algumas propriedades
+ > Output:
 ```
+  4.0.3
+```
+
+## jm_dataconfiguration
+Retorna as informações contidas no arquivo configuration.php do Joomla com algumas propriedades
+```bash
 zabbix_agentd -t joomla.site[{$site},jm_dataconfiguration]
 ```
-
-- Retorna os usuarios cadastrados no banco de dados da aplicação com acesso administrativo
+ > Output:
+```js
+{
+  "sitename":"MySite",
+  "editor":"jce",
+  "dbtype":"mysqli",
+  "host":"localhost",
+  "user":"web_site",
+  "dbprefix":"myjml_",
+  "mailfrom":"suporte@site.com.br",
+  "fromname":"My Site",
+  "smtphost":"smtp.site.com.br"
+}
 ```
+
+## jm_users
+Retorna os usuarios cadastrados no banco de dados da aplicação com acesso administrativo
+```bash
 zabbix_agentd -t joomla.site[{$site},jm_users]
+```
+ > Output:
+```js
+{
+  "usuarios":[
+    {
+      "name":"Super User",
+      "username":"admin",
+      "email":"admin@site.com.br"
+    },
+    {
+      "name":"seguranca",
+      "username":"seguranca",
+      "email":"seguranca@site.com.br"
+    },
+    {
+      "name":"Comunicação Social",
+      "username":"comsoc",
+      "email":"comsoc@site.com.br"
+    },
+  ]
+}
+```
+
+## jm_nusers
+Retorna os número total de usuarios cadastrados no banco de dados da aplicação com acesso administrativo
+```bash
+zabbix_agentd -t joomla.site[{$site},jm_nusers]
+```
+ > Output:
+```
+  3
 ```
