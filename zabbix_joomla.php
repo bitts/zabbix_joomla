@@ -22,6 +22,7 @@
 ** Brazil - 26/09/2021 
 ** Versions
 ** 1.0v - Primeira versão do monitor zabbix para joomla
+** 1.1v - Melhorias para funcionamento com regra de descoberta utilizando dados dos sites publicados pelo apache
 ** 
 ** NOTES:
 ** Obs: Necessário habilitar acesso root para usuario Zabbix:
