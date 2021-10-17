@@ -37,71 +37,94 @@ $url = $htmlstatus = '';
 if(php_sapi_name() == 'cli' || PHP_SAPI === 'cli'){
 
 	if(isset($argv[1])) {
-		$om = $argv[1];
-		$vh = parseVirtualHosts("/etc/apache2/sites-available/{$om}.eb.mil.br.conf");
-
-		$jm = new mn_joomla_zb($vh->documentRoot);
-
-		if(isset($argv[2]) && !empty($vh) && !empty($jm)){
-			switch($argv[2]){
-				case 'virtualhosts':
-					echo json_encode($vh);
-				break;
-				case 'folder':
-					echo !empty($vh->documentRoot)?$vh->documentRoot:null;
-				break;
-				case 'serverName':
-					echo !empty($vh->serverName)?$vh->serverName:null;
-				break;
-				case 'serverAlias':
-					echo !empty($vh->serverAlias)?$vh->serverAlias:null;
-				break;
-				case 'port':
-					echo !empty($vh->ports)?implode(',',$vh->ports):null;
-				break;
-				case 'apacheconf':
-					echo !empty($vh->file)?$vh->file:null;
-				break;
-				case 'jpas':
-					echo json_encode($jm->jm_backupfiles());
-				break;
-				case 'jpasize':
-					echo $jm->jpa('jpasize');
-				break;
-				case 'hjpasize':
-					echo $jm->jpa('hjpasize');
-				break;
-				case 'njpas':
-					echo $jm->jpa('njpas');
-				break;
-				case 'foldersize':
-					echo $jm->foldersize();
-				break;
-				case 'hfoldersize':
-					echo $jm->hfoldersize();
-				break;
-				case 'permission':
-					echo substr(sprintf('%o', fileperms($vh->documentRoot)), -4);
-				break;
-				case 'jm_version':
-					$vs = $jm->jm_getVersion();
-					echo $jm->getJoomlaVersionCURL();
-				break;
-				case 'jm_lastversion':
-					echo $jm->jm_lastVersion();
-				break;
-				case 'jm_dataconfiguration':
-					$item = isset($argv[3])?$argv[3]:'';
-					$valor = $jm->jm_getParamConfiguration($vh->documentRoot,$item);
-					unset($valor->dtbs);unset($valor->pswd);
-					echo json_encode($valor, JSON_UNESCAPED_UNICODE);
-				break;
-				case 'jm_users':
-					$param = $jm->jm_getParamConfiguration();
-					$valor = $jm->getDBUsers($param);
-					echo json_encode($valor, JSON_UNESCAPED_UNICODE);
+		if(isset($argv[1]) && !isset($argv[2])){
+			switch($argv[1]){
+                        	case 'sites':
+					header('Content-Type: application/json;charset=utf-8');
+                                	$valor = publish_apache();
+		                        //echo json_encode($valor, JSON_UNESCAPED_UNICODE);
+					echo json_encode($valor, JSON_UNESCAPED_SLASHES);
+					//echo json_encode($valor, JSON_PRETTY_PRINT);
+                	        break;
+				case 'lastversionjoomla':
+					echo JoomlalastVersion();
 				break;
 			}
+		}else if(isset($argv[1]) && isset($argv[2])){
+			$site = $argv[1];
+			$vh = parseVirtualHosts("/etc/apache2/sites-available/{$site}.conf");
+	                $jm = new mn_joomla_zb($vh->documentRoot);
+			if(!empty($vh) && !empty($jm)){
+				switch($argv[2]){
+					case 'sites':
+						$valor = publish_apache();
+						echo json_encode($valor, JSON_UNESCAPED_UNICODE);
+					break;
+					case 'virtualhosts':
+						echo json_encode($vh);
+					break;
+					case 'folder':
+						echo !empty($vh->documentRoot)?$vh->documentRoot:null;
+					break;
+					case 'serverName':
+						echo !empty($vh->serverName)?$vh->serverName:null;
+					break;
+					case 'serverAlias':
+						echo !empty($vh->serverAlias)?$vh->serverAlias:null;
+					break;
+					case 'port':
+						echo !empty($vh->ports)?implode(',',$vh->ports):null;
+					break;
+					case 'apacheconf':
+						echo !empty($vh->file)?$vh->file:null;
+					break;
+					case 'jpas':
+						echo json_encode($jm->jm_backupfiles());
+					break;
+					case 'jpasize':
+						echo $jm->jpa('jpasize');
+					break;
+					case 'hjpasize':
+        	                        	echo $jm->jpa('hjpasize');
+       		                        break;
+					case 'njpas':
+       	                                	echo $jm->jpa('njpas');
+       	                         	break;
+					case 'foldersize':
+						echo $jm->foldersize();
+					break;
+					case 'hfoldersize':
+						echo $jm->hfoldersize();
+					break;
+					case 'permission':
+						echo substr(sprintf('%o', fileperms($vh->documentRoot)), -4);
+					break;
+					case 'jm_version':
+						echo $jm->getJoomlaVersionCURL();
+					break;
+					case 'jm_lastversion':
+						echo JoomlalastVersion();
+					break;
+					case 'jm_dataconfiguration':
+						$item = isset($argv[3])?$argv[3]:'';
+						$valor = $jm->jm_getParamConfiguration($vh->documentRoot,$item);
+						unset($valor->dtbs);unset($valor->pswd);
+						echo json_encode($valor, JSON_UNESCAPED_UNICODE);
+					break;
+
+					case 'jm_users':
+						$param = $jm->jm_getParamConfiguration();
+						$valor = $jm->getDBUsers($param);
+						echo json_encode($valor, JSON_UNESCAPED_UNICODE);
+					break;
+					case 'jm_nusers':
+       	                                	$param = $jm->jm_getParamConfiguration();
+       	                                 	$valor = $jm->getDBUsers($param);
+       	                                 	echo sizeof($valor->usuarios);
+       	                         	break;
+
+				}
+			}else echo "Nãoo foi possível ler arquivo de configuração do apache para coleta dos dados";
 		}
 	}
 
@@ -158,6 +181,151 @@ function parseVirtualHosts($file) {
 		if ($fh)fclose($fh);
 	}
 	return $obj;
+}
+
+/**
+* Return url is on-line
+* Application: Zabbix Agent Monitor UserParameter
+* @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
+*/
+function url_exists( $url ) {
+	if( function_exists('curl_init') ){
+		$ch = curl_init( $url );
+		curl_setopt($ch, CURLOPT_NOBODY, true);
+		curl_exec($ch);
+		$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		curl_close($ch);
+	}
+	if( !isset($code) || empty($code) ){
+		if(function_exists('get_headers') ){
+			$file_headers = @get_headers($url);
+			if ($file_headers === false) $code = 404;
+			$code = substr($file_headers[0], 9, 3);
+		}
+	}
+	return ($code >= 200 && $code < 400); // verifica se recebe "status OK"
+}
+
+
+/**
+* return status to active url
+* @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>	
+* @param string $url 
+* @return bool
+*/    
+function url_exists( $url ) {
+	if( function_exists('curl_init') ){
+		$ch = curl_init( $url );
+		curl_setopt($ch, CURLOPT_NOBODY, true);
+		curl_exec($ch);
+		$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		curl_close($ch);
+	}
+
+	if( !isset($code) || empty($code) ){
+		if(function_exists('get_headers') ){
+			$file_headers = @get_headers($url);
+			if ($file_headers === false) $code = 404;
+			$code = substr($file_headers[0], 9, 3);
+		}
+	}
+	return ($code >= 200 && $code < 400); // verifica se recebe "status OK"
+}
+
+/**
+* return last version released to CMS Joomla!
+* @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
+* @return string   
+*/
+function JoomlalastVersion(){
+	$version = 0;
+	if( function_exists('curl_init') &&  function_exists('json_decode') ){
+		$json_server = "https://downloads.joomla.org/api/v1/latest/cms";
+		if(url_exists($json_server)){
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+			curl_setopt($ch, CURLOPT_HEADER, false);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+			curl_setopt($ch, CURLOPT_URL, $json_server);
+			curl_setopt($ch, CURLOPT_REFERER, $json_server);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+			$content = curl_exec($ch);
+			curl_close($ch);
+			$data = json_decode($content);
+			if(!empty($data)){
+				foreach ($data as $campo => $value){
+					if( $campo == "branch" && $value == "Joomla! 3" ){
+						$version = $campo->version;
+					}
+				}
+			}
+		}
+	}
+	if( @$version == 0 && function_exists('json_decode') && function_exists('file_get_contents') ){
+		$json_server = "https://downloads.joomla.org/api/v1/latest/cms";
+		if(url_exists($json_server)){
+			$arrContextOptions=array(
+				"ssl" => array(
+					"verify_peer"=>false,
+					"verify_peer_name"=>false
+				)
+			);
+			$content = file_get_contents($json_server, false, stream_context_create($arrContextOptions));
+			$data = json_decode($content);
+			if(!empty($data)){
+				foreach ($data as $campo => $value){
+					if( $campo == "branch" && $value == "Joomla! 3" ){
+						$version = $campo->version;
+					}
+				}
+			}
+		}
+	}
+	if( $version == 0 && function_exists('simplexml_load_file') ){
+		$xml_server = "http://update.joomla.org/core/list.xml";
+		if(url_exists($xml_server)){
+			$xml = simplexml_load_file($xml_server);
+			if($xml){
+				foreach ($xml->children() as $campo => $value) {
+					foreach ($value->attributes() as $k=>$v) {
+						if($k == "version")$version = $v;
+					}
+				}
+			}
+		}
+	}
+	if($version == 0)$version="4.0.3";
+	return $version;
+}
+
+/**
+* return websites to avaliables in apache server
+* @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
+* @return object   
+*/
+function publish_apache($path = "/etc/apache2/sites-available/"){
+	$retorno = new stdClass();
+	//$retorno = [];
+	try{
+		$diretorio = dir($path);
+		while($vhost_conf = $diretorio->read()){
+			/* aplicação no exercito brasileiro | para outros: $site = $vhost_conf; */
+			$site = substr($vhost_conf, 0, strpos($vhost_conf, ".eb.mil.br"));
+			if(!empty($site)){
+				//$retorno->data[] = json_decode('{"{#OM}": "'. $site . '"}');
+				//$retorno->data[] = json_decode("{'om' : $site}");
+				$obj = new stdClass();
+				$obj->om = $site;
+				$retorno->data[] = $obj;
+			}
+		}
+	}catch(Exception $e){
+		echo "Erro ao coletar dados dos sites hospedados : {$e->getMessage()}";
+	} finally {
+		$diretorio->close();
+	}
+
+	return $retorno;
 }
 
 
@@ -242,103 +410,7 @@ class mn_joomla_zb{
   		return $total_size;
 	}
 
-	/**
-	* return status to active url
-	* @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>	
-	* @access private
-	* @param string $url 
-	* @return bool
-	*/    
-	private function url_exists( $url ) {
-		if( function_exists('curl_init') ){
-			$ch = curl_init( $url );
-			curl_setopt($ch, CURLOPT_NOBODY, true);
-			curl_exec($ch);
-			$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-			curl_close($ch);
-		}
-
-		if( !isset($code) || empty($code) ){
-			if(function_exists('get_headers') ){
-				$file_headers = @get_headers($url);
-				if ($file_headers === false) $code = 404;
-				$code = substr($file_headers[0], 9, 3);
-			}
-		}
-		return ($code >= 200 && $code < 400); // verifica se recebe "status OK"
-	}
-
-	/**
-	* return last version released to CMS Joomla!
-	* @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
-	* @access private
-	* @return string   
-	*/
-	public function jm_lastVersion(){
-		$version = 0;
-		$json_server = "https://downloads.joomla.org/api/v1/latest/cms";
-		
-		if( function_exists('curl_init') &&  function_exists('json_decode') ){
-			if(self::url_exists($json_server)){
-				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-				curl_setopt($ch, CURLOPT_HEADER, false);
-				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-				curl_setopt($ch, CURLOPT_URL, $json_server);
-				curl_setopt($ch, CURLOPT_REFERER, $json_server);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-				$content = curl_exec($ch);
-				curl_close($ch);
-
-				$data = json_decode($content);
-				if(!empty($data)){
-					foreach ($data as $campo => $value){
-						if( $campo == "branch" && $value == "Joomla! 3" ){
-							$version = $campo->version;
-						}
-					}
-				}
-			}
-		}
-
-		if( $version == 0 && function_exists('json_decode') && function_exists('file_get_contents') ){
-			if(self::url_exists($json_server)){
-				$arrContextOptions=array(
-					"ssl" => array(
-						"verify_peer"=>false,
-						"verify_peer_name"=>false
-					)
-				);
-				$content = file_get_contents($json_server, false, stream_context_create($arrContextOptions));
-				$data = json_decode($content);
-				if(!empty($data)){
-					foreach ($data as $campo => $value){
-						if( $campo == "branch" && $value == "Joomla! 3" ){
-							$version = $campo->version;
-						}
-					}
-				}
-			}
-		}
-
-		if( $version == 0 && function_exists('simplexml_load_file') ){
-			$xml_server = "http://update.joomla.org/core/list.xml";
-			if(self::url_exists($xml_server)){
-				$xml = simplexml_load_file($xml_server);
-				if($xml){
-					foreach ($xml->children() as $campo => $value) {
-						foreach ($value->attributes() as $k=>$v) {
-							if($k == "version")$version = $v;
-						}
-					}
-				}
-			}
-		}
-
-		if($version == 0)$version="4.0.3";
-		return $version;
-	}
-
+	
 	/**
 	* return sizeof the folder
 	* @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
