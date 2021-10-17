@@ -5,7 +5,7 @@
 <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/bitts/zabbix_joomla">
 <img alt="GitHub Release Date" src="https://img.shields.io/github/release-date/bitts/zabbix_joomla">
 <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/bitts/zabbix_joomla/total">
-<img alt="GitHub release (latest by date)" src="https://img.shields.io/github/downloads/bitts/zabbix_joomla/1.0v/total">
+<img alt="GitHub release (latest by date)" src="https://img.shields.io/github/downloads/bitts/zabbix_joomla/1.1v/total">
 <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/bitts/zabbix_joomla">
 <!-- img alt="Packagist License (custom server)" src="https://img.shields.io/packagist/l/bitts/zabbix_joomla" -->
 
