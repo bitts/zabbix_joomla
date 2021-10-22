@@ -188,30 +188,6 @@ function parseVirtualHosts($file) {
 }
 
 /**
-* Return url is on-line
-* Application: Zabbix Agent Monitor UserParameter
-* @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
-*/
-function url_exists( $url ) {
-	if( function_exists('curl_init') ){
-		$ch = curl_init( $url );
-		curl_setopt($ch, CURLOPT_NOBODY, true);
-		curl_exec($ch);
-		$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		curl_close($ch);
-	}
-	if( !isset($code) || empty($code) ){
-		if(function_exists('get_headers') ){
-			$file_headers = @get_headers($url);
-			if ($file_headers === false) $code = 404;
-			$code = substr($file_headers[0], 9, 3);
-		}
-	}
-	return ($code >= 200 && $code < 400); // verifica se recebe "status OK"
-}
-
-
-/**
 * return status to active url
 * @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>	
 * @param string $url 
