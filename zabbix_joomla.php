@@ -20,6 +20,7 @@
 ** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 **
 ** Create by Marcelo Valvassori BITTENCOURT <marcelo.valvassori@gmail.com>
+** Github Project: https://github.com/bitts/zabbix_joomla/
 ** Brazil
 **
 ** Versions
