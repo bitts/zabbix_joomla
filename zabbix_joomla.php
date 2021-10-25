@@ -285,27 +285,46 @@ function JoomlalastVersion(){
 */
 function publish_apache($path = "/etc/apache2/sites-available/"){
 	$retorno = new stdClass();
-	//$retorno = [];
-	try{
-		$diretorio = dir($path);
-		while($vhost_conf = $diretorio->read()){
-			/* aplicação no exercito brasileiro | para outros: $site = $vhost_conf; */
-			$site = substr($vhost_conf, 0, strpos($vhost_conf, ".eb.mil.br"));
-			if(!empty($site)){
-				//$retorno->data[] = json_decode('{"{#OM}": "'. $site . '"}');
-				//$retorno->data[] = json_decode("{'om' : $site}");
-				$obj = new stdClass();
-				$obj->om = $site;
-				$retorno->data[] = $obj;
-			}
-		}
-	}catch(Exception $e){
-		echo "Erro ao coletar dados dos sites hospedados : {$e->getMessage()}";
-	} finally {
-		$diretorio->close();
-	}
 
-	return $retorno;
+        if(function_exists('exec')){
+                $out = "";
+                $cmd="apache2ctl -S | grep namevhost | awk -F ' ' '{ print $4 }'";
+                $out = array();
+                exec($cmd, $out);
+                if(!empty($out)){
+                        foreach($out as $site){
+                                $obj = new stdClass();
+                                $obj->om = $site;
+                                $retorno->data[] = $obj;
+                        }
+                }
+        }
+
+        if(empty($retorno)){
+                try{
+                        $diretorio = dir($path);
+                        while($vhost_conf = $diretorio->read()){
+                                /* aplicação no exercito brasileiro | para outros: $site = $vhost_conf; */
+                                //$site = substr($vhost_conf, 0, strpos($vhost_conf, ".eb.mil.br"));
+                                //$site = str_replace('intranet.','',$site);
+                                $site = $vhost_conf;
+                                if(!empty($site)){
+                                        //$retorno->data[] = json_decode('{"{#OM}": "'. $site . '"}');
+                                        //$retorno->data[] = json_decode("{'om' : $site}");
+                                        $obj = new stdClass();
+                                        $obj->om = $site;
+                                        $retorno->data[] = $obj;
+                                }
+                        }
+                }catch(Exception $e){
+                        echo "Erro ao coletar dados dos sites hospedados : {$e->getMessage()}";
+                } finally {
+                        $diretorio->close();
+                }
+        }
+
+
+        return $retorno;
 }
 
 
