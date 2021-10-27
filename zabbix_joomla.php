@@ -321,6 +321,12 @@ function publish_apache($path = "/etc/apache2/sites-available/"){
 	$retorno = new stdClass();
 
         if(function_exists('exec')){
+		/*
+		# apache2ctl -S   [On Debian/Ubuntu]
+		# apachectl -S    [On CentOS/RHEL]
+		OR
+		# httpd -S
+		*/
                 $out = "";
                 $cmd="apache2ctl -S | grep namevhost | awk -F ' ' '{ print $4 }'";
                 $out = array();
