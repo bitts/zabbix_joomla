@@ -26,6 +26,7 @@
 ** Versions
 ** 1.0v - 26/09/2021 - Primeira versão do monitor zabbix para joomla
 ** 1.1v - 17/10/2021 - Melhorias para funcionamento com regra de descoberta utilizando dados dos sites publicados pelo apache
+** 1.2v - 27/10/2021 - Melhorias na busca de dados no arquivo de configuração do apache com base no retorno do comando apache2ctl
 ** 
 ** NOTES:
 ** Obs: Necessário habilitar acesso root para usuario Zabbix:
@@ -137,54 +138,86 @@ if(php_sapi_name() == 'cli' || PHP_SAPI === 'cli'){
 /**
 * return information to configuration publish apache2 website
 * @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
+* @upgrade 27/10/2021 - nginx | apache
 * @param String $file 
 * @return mixed
 */
 function parseVirtualHosts($file) {
-	try{
-		$fh = fopen($file, 'r');
-		$port = '';
-		$obj = new stdClass();
-		if($fh)
-		while(!feof($fh)) {
-			$line = fgets($fh);
-			if(!empty($line) && preg_replace('/\s+/', '', $line) ){
-				if ( preg_match("/<VirtualHost/i", $line) ) {
-					preg_match("/<VirtualHost\s+(.+):(.+)\s*>/i", $line, $results);
-					if( !empty($results[1]) && $results[1] == "*" && !empty($results[2]) ) {
-						$obj->ports[] = $port = $results[2];
-					}
-				}
-				if((isset($port) && !empty($port)) && !empty($file))$obj->file = $file;
-				if ((isset($port) && !empty($port)) && preg_match("/DocumentRoot/i", $line)) {
-					preg_match("/DocumentRoot\s+(.+)\s*/i", $line, $results);
-					if (isset($results[0]) && !empty($results[1]) ) {
-						$values = array_values(array_filter(explode(' ', $results[0])));
-						if($values[0] == "DocumentRoot")$obj->documentRoot = trim($values[1]);
-					}
-				}
-				if ((isset($port) && !empty($port)) && preg_match("/ServerName/i", $line)) {
-					preg_match("/ServerName\s+(.+)\s*/i", $line, $results);
-					if (isset($results[0]) && !empty($results[1]) ) {
-						$values = array_values(array_filter(explode(' ', $results[0])));
-						if(!empty($values[1]))$obj->serverName = trim($values[1]);
-					}
-				}
-				if((isset($port) && !empty($port)) && preg_match("/ServerAlias/i", $line)) {
-					preg_match("/ServerAlias\s+(.+)\s*/i", $line, $results);
-					if (isset($results[0]) && !empty($results[1]) ) {
-						$values = array_values(array_filter(explode(' ', $results[0])));
-						if(!empty($values[1]))$obj->serverAlias = trim($values[1]);
+	$obj = new stdClass();
+	if(!file_exists($file))return $obj;
+	else{
+		try{
+			$fh = fopen($file, 'r');
+			$port = $documentRoot = $serverName = $serverAlias = '';
+			$obj->file_conf = $file;
+			if($fh){
+				while(!feof($fh)) {
+					$line = fgets($fh);
+					if(!empty($line)){
+						/* apache */
+						if (empty($port) && preg_match("/<VirtualHost/i", $line) ) {
+							preg_match("/<VirtualHost\s+(.+):(.+)\s*>/i", $line, $results);
+							if( !empty($results[1]) && $results[1] == "*" && !empty($results[2]) ) {
+								$obj->ports[] = $port = $results[2];
+							}
+						}
+						/* nginx */
+						if(empty($port) && preg_match('/listen/i', $line) ){
+							if ( preg_match("/(\d+)/g", $line, $results)) {
+								if (isset($results[0]) && !empty($results[1]) ) {
+									$values = array_values(array_filter(explode(' ', $results[0])));
+									if(!empty($values[1]))$obj->ports[] = $port = trim($values[1]);
+								}
+							}
+						}
+
+						/* apache */
+						if (empty($obj->documentRoot) && preg_match("/DocumentRoot\s+(.+)\s*/i", $line, $results) ) {
+							if (isset($results[0]) && !empty($results[1]) ) {
+								$values = array_values(array_filter(explode(' ', $results[0])));
+								if($values[0] == "DocumentRoot")$obj->documentRoot = $documentRoot = trim($values[1]);
+							}
+						}
+						/* nginx */
+						if (empty($obj->documentRoot) && preg_match("/root\s+(.+)\s*/i", $line, $results) ){
+							if (isset($results[0]) && !empty($results[1]) ) {
+								$values = array_values(array_filter(explode(' ', $results[0])));
+								if($values[0] == "root")$obj->documentRoot = $documentRoot = trim($values[1]);
+							}
+						}
+						/* apache */
+						if (empty($serverName) && preg_match("/ServerName\s+(.+)\s*/i", $line, $results) ){
+							if (isset($results[0]) && !empty($results[1]) ) {
+								$values = array_values(array_filter(explode(' ', $results[0])));
+								if(!empty($values[1]))$obj->serverName = $serverName = trim($values[1]);
+							}
+						}
+						/* apache */
+						if(empty($serverAlias) && preg_match("/ServerAlias\s+(.+)\s*/i", $line, $results) ){
+							if (isset($results[0]) && !empty($results[1]) ) {
+								$values = array_values(array_filter(explode(' ', $results[0])));
+								if(!empty($values[1]))$obj->serverAlias = $serverAlias = trim($values[1]);
+							}
+						}
+						/* nginx */
+						if((empty($serverAlias) || empty($serverName)) && preg_match("/server_name\s+(.+)\s*/i", $line, $results)){
+							if (isset($results[0]) && !empty($results[1]) ) {
+								$values = array_values(array_filter(explode(' ', $results[0])));
+								if(!empty($values[1]))$obj->serverName = $obj->serverAlias = $serverName = $serverAlias = trim($values[1]);
+							}
+						}
 					}
 				}
 			}
+
+		} catch (\Throwable $e) {
+			echo "Erro ao buscar dados dos Virtual Hosts : {$e->getMessage()}";
+		} finally {
+			if ($fh) fclose($fh);
+			if(!isset($obj->ports) || empty($obj->ports)) $obj->ports[] = 80;
 		}
-	} catch (\Throwable $e) {
-		echo "Erro ao buscar dados dos Virtual Hosts : {$e->getMessage()}";
-	} finally {
-		if ($fh)fclose($fh);
+		return $obj;
 	}
-	return $obj;
 }
 
 /**
@@ -281,6 +314,7 @@ function JoomlalastVersion(){
 /**
 * return websites to avaliables in apache server
 * @author Marcelo Valvassori Bittencourt <marcelo.valvassori@gmail.com>
+* @upgrade 27/10/2021 - checked published sites using apache2ctl | nginx? future!
 * @return object   
 */
 function publish_apache($path = "/etc/apache2/sites-available/"){
@@ -300,29 +334,23 @@ function publish_apache($path = "/etc/apache2/sites-available/"){
                 }
         }
 
-        if(empty($retorno)){
-                try{
-                        $diretorio = dir($path);
-                        while($vhost_conf = $diretorio->read()){
-                                /* aplicação no exercito brasileiro | para outros: $site = $vhost_conf; */
-                                //$site = substr($vhost_conf, 0, strpos($vhost_conf, ".eb.mil.br"));
-                                //$site = str_replace('intranet.','',$site);
-                                $site = $vhost_conf;
-                                if(!empty($site)){
-                                        //$retorno->data[] = json_decode('{"{#OM}": "'. $site . '"}');
-                                        //$retorno->data[] = json_decode("{'om' : $site}");
-                                        $obj = new stdClass();
-                                        $obj->om = $site;
-                                        $retorno->data[] = $obj;
-                                }
+        try{
+                $diretorio = dir($path);
+                while($vhost_conf = $diretorio->read()){
+                        $site = str_replace('.conf','',$vhost_conf);
+                        if(!empty($site) && (!empty($published)?in_array($site, $published):true) ){
+                                //$retorno->data[] = json_decode('{"{#OM}": "'. $site . '"}');
+                                //$retorno->data[] = json_decode("{'om' : $site}");
+                                $obj = new stdClass();
+                                $obj->om = $site;
+                                $retorno->data[] = $obj;
                         }
-                }catch(Exception $e){
-                        echo "Erro ao coletar dados dos sites hospedados : {$e->getMessage()}";
-                } finally {
-                        $diretorio->close();
                 }
+        }catch(Exception $e){
+                echo "Erro ao coletar dados dos sites hospedados : {$e->getMessage()}";
+        } finally {
+                $diretorio->close();
         }
-
 
         return $retorno;
 }
