@@ -13,7 +13,7 @@
 
 - [References](#references)
 - [Template](#template)
-- [Usage](#uses%C3%A7%C3%A3o)
+- [Usage](#usage)
   * [Options for monitoring](#op%C3%A7%C3%B5es-for-monitoring)
     + [virtualhosts](#virtualhosts)
     + [folder](#folder)
