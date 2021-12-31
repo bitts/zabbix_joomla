@@ -167,4 +167,142 @@ zabbix_agentd -t joomla.site[{$site},jpas]
   {
     "size": 27120,
     "size":"26.48 KB",
-    "name":"\/var\/www\/site\/\/administrator\/components\/com_akeeba
+    "name":"\/var\/www\/site\/\/administrator\/components\/com_akeeba\/Master\/Installers\/angie-joomla.jpa",
+    "date":"2021-09-01 11:02:56"
+  },
+  {
+    "size":46692,
+    "size":"45.6 KB",
+    "name":"\/var\/www\/site\/\/administrator\/components\/com_akeeba\/Master\/Installers\/angie-mautic.jpa",
+    "date":"2016-09-19 11:31:24"
+  },
+]
+```
+
+## hjpasize
+Returns the total size of JPAs contained in the Joomla directory
+```bash
+zabbix_agentd -t joomla.site[{$site},hjpasize]
+```
+ > Output:
+```
+  628355
+```
+
+## njpas
+Returns the total number of JPAs contained in the Joomla directory
+```bash
+zabbix_agentd -t joomla.site[{$site},njpas]
+```
+ > Output:
+```
+  3
+```
+
+## foldersize
+Returns the total size occupied by Joomla files
+```bash
+zabbix_agentd -t joomla.site[{$site},folderssize]
+```
+ > Output:
+```
+  623471397
+```
+
+## hfoldersize
+Returns the total size occupied by Joomla (formatted) files
+```bash
+zabbix_agentd -t joomla.site[{$site},hfolderssize]
+```
+ > Output:
+```
+  594.59 MB
+```
+
+## permission
+Return Joomla file permissions
+```bash
+zabbix_agentd -t joomla.site[{$site},permission]
+```
+ > Output:
+```
+  2770
+```
+
+## jm_version
+Return installed version of Joomla
+```bash
+zabbix_agentd -t joomla.site[{$site},jm_version]
+```
+ > Output:
+```
+  3.9.27
+```
+
+## jm_lastversion
+Returns the latest stable and released version of CMS Joomla
+```bash
+zabbix_agentd -t joomla.site[{$site},jm_lastversion]
+```
+ > Output:
+```
+  4.0.3
+```
+
+## jm_dataconfiguration
+Returns the information contained in the Joomla configuration.php file with some properties
+```bash
+zabbix_agentd -t joomla.site[{$site},jm_dataconfiguration]
+```
+ > Output:
+```js
+{
+  "sitename" : "MySite",
+  "editor" : "jce",
+  "dbtype" : "mysqli",
+  "host" : "localhost",
+  "user" : "web_site",
+  "dbprefix" : "myjml_",
+  "mailfrom" : "support@site.com.br",
+  "fromname" : "My Site",
+  "smtphost" : "smtp.site.com.br"
+}
+```
+
+## jm_users
+Returns users registered in the application's database with administrative access
+```bash
+zabbix_agentd -t joomla.site[{$site},jm_users]
+```
+ > Output:
+```js
+{
+  "users":[
+    {
+      "name" : "Super User",
+      "username" : "admin",
+      "email" : "admin@site.com.br"
+    },
+    {
+      "name" : "security",
+      "username" : "security",
+      "email" : "seguranca@site.com.br"
+    },
+    {
+      "name" : "Social Communication",
+      "username" : "comsoc",
+      "email" : "comsoc@site.com.br"
+    }
+  ]
+}
+```
+
+## jm_nusers
+Returns the total number of users registered in the application's database with administrative access
+```bash
+zabbix_agentd -t joomla.site[{$site},jm_nusers]
+```
+ > Output:
+```
+  3
+```
