@@ -161,19 +161,19 @@ zabbix_agentd -t joomla.site[{$site},jpas]
   {
     "tamanho":554543,
     "size":"541.55 KB",
-    "name":"\/var\/www\/1bcom\/\/administrator\/components\/com_akeeba\/Master\/Installers\/angie.jpa",
+    "name":"\/var\/www\/site\/\/administrator\/components\/com_akeeba\/Master\/Installers\/angie.jpa",
     "date":"2021-09-01 11:02:56"
   },
   {
     "tamanho":27120,
     "size":"26.48 KB",
-    "name":"\/var\/www\/1bcom\/\/administrator\/components\/com_akeeba\/Master\/Installers\/angie-joomla.jpa",
+    "name":"\/var\/www\/site\/\/administrator\/components\/com_akeeba\/Master\/Installers\/angie-joomla.jpa",
     "date":"2021-09-01 11:02:56"
   },
   {
     "tamanho":46692,
     "size":"45.6 KB",
-    "name":"\/var\/www\/1bcom\/\/administrator\/components\/com_akeeba\/Master\/Installers\/angie-mautic.jpa",
+    "name":"\/var\/www\/site\/\/administrator\/components\/com_akeeba\/Master\/Installers\/angie-mautic.jpa",
     "date":"2016-09-19 11:31:24"
   },
 ]
@@ -257,15 +257,15 @@ zabbix_agentd -t joomla.site[{$site},jm_dataconfiguration]
  > Output:
 ```js
 {
-  "sitename":"MySite",
-  "editor":"jce",
-  "dbtype":"mysqli",
-  "host":"localhost",
-  "user":"web_site",
-  "dbprefix":"myjml_",
-  "mailfrom":"suporte@site.com.br",
-  "fromname":"My Site",
-  "smtphost":"smtp.site.com.br"
+  "sitename" : "MySite",
+  "editor" : "jce",
+  "dbtype" : "mysqli",
+  "host" : "localhost",
+  "user" : "web_site",
+  "dbprefix" : "myjml_",
+  "mailfrom" : "suporte@site.com.br",
+  "fromname" : "My Site",
+  "smtphost" : "smtp.site.com.br"
 }
 ```
 
@@ -279,20 +279,20 @@ zabbix_agentd -t joomla.site[{$site},jm_users]
 {
   "usuarios":[
     {
-      "name":"Super User",
-      "username":"admin",
-      "email":"admin@site.com.br"
+      "name" : "Super User",
+      "username" : "admin",
+      "email" : "admin@site.com.br"
     },
     {
-      "name":"seguranca",
-      "username":"seguranca",
-      "email":"seguranca@site.com.br"
+      "name" : "seguranca",
+      "username" : "seguranca",
+      "email" : "seguranca@site.com.br"
     },
     {
-      "name":"Comunicação Social",
-      "username":"comsoc",
-      "email":"comsoc@site.com.br"
-    },
+      "name" : "Comunicação Social",
+      "username" : "comsoc",
+      "email" : "comsoc@site.com.br"
+    }
   ]
 }
 ```
