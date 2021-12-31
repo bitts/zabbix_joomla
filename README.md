@@ -11,7 +11,7 @@
 
 <p align="left"><a href="https://downloads.joomla.org" target="_blank" rel="noopener noreferrer"><img src="https://downloads.joomla.org/images/homepage/joomla-logo.png" alt="Joomla Logo"></a></p>
 
-- [References](#refer%C3%AAncias)
+- [References](#references)
 - [Template](#template)
 - [Usage](#uses%C3%A7%C3%A3o)
   * [Options for monitoring](#op%C3%A7%C3%B5es-for-monitoring)
