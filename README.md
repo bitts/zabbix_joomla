@@ -93,7 +93,7 @@ zabbix_agentd -t joomla.site[{$site},virtualhosts]
 ```js
 {
   "ports":["80","443"],
-  "file":"\/etc\/apache2\/sites-available\/site.com.br.conf",
+  "file":"\/etc\/apache2\/sites-avaliable\/site.com.br.conf",
   "documentRoot":"\/var\/www\/site\/",
   "serverName":"www.site.com.br",
   "serverAlias":"site.com.br"
