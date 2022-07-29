@@ -34,7 +34,7 @@
 
 # Zabbix User Agent to CMS Joomla!
 
-Script de monitoramento utilizando UserPatameter do Zabbix para aplicação Joomla.
+Script de monitoramento utilizando UserParameter do Zabbix para aplicação Joomla.
 
 ## Referências
 - https://www.zabbix.com/documentation/current/pt/manual/concepts/agent
