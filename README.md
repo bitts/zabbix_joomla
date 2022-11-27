@@ -1,5 +1,4 @@
-# Zabbix monitoring for CMS Joomla!
-
+# Zabbix Monitoring for Server Hosting CMS Joomla!
 
 <a href="https://github.com/bitts/zabbix_joomla"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/bitts/zabbix_joomla"></a>
 <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/bitts/zabbix_joomla">
