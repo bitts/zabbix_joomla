@@ -37,7 +37,7 @@ Monitoring script using Zabbix UserPatameter for Joomla application.
 
 ## References
 - https://www.zabbix.com/documentation/current/pt/manual/concepts/agent
-- https://www.zabbix.com/documentation/guidelines/coding/php
+- https://www.zabbix.com/documentation/guidelines/en/coding/php
 
 ## Template
 - Import `zbx_export_templates_joomla.xml`. [zabbix doc](https://www.zabbix.com/documentation/current/manual/xml_export_import/templates)
