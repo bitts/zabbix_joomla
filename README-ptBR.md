@@ -38,7 +38,8 @@ Script de monitoramento utilizando UserParameter do Zabbix para aplicação Joom
 
 ## Referências
 - https://www.zabbix.com/documentation/current/pt/manual/concepts/agent
-- https://www.zabbix.com/documentation/guidelines/coding/php
+- 
+https://www.zabbix.com/documentation/guidelines/en/coding/php
 
 ## Template
 - Import `zbx_export_templates_joomla.xml`.  [zabbix doc](https://www.zabbix.com/documentation/current/manual/xml_export_import/templates)
